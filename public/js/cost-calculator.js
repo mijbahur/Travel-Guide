@@ -1,1 +1,1 @@
-// Starter JavaScript for cost calculator logic.
+// Task 4 JavaScript - Calculate travel cost estimates based on travelers and duration.

@@ -1,1 +1,1 @@
-// Starter JavaScript for post search functionality.
+// Task 4 JavaScript - Search and filter posts via AJAX calls.

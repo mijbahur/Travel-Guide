@@ -1,1 +1,1 @@
-// Starter JavaScript for comment actions.
+// Task 4 JavaScript - Add and delete comments via AJAX.
