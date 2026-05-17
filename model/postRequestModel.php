@@ -24,4 +24,23 @@ function getApprovedPostsByScout($scoutId)
     return $stmt->fetchAll();
 }
 
+
+// CREATE
+function createPostRequest($scoutId, $postData, $imagePath = null) {
+    $con = getConnection();
+    
+    if ($imagePath) {
+        $postData['image'] = $imagePath;
+    }
+
+    $json = json_encode($postData);
+
+    $stmt = $con->prepare(
+        "INSERT INTO post_requests (scout_id, post_data, requested_at, status)
+         VALUES (:scout_id, :post_data, NOW(), 'pending')"
+    );
+    $stmt->execute([':scout_id' => $scoutId, ':post_data' => $json]);
+    return $con->lastInsertId();
+}
+
 ?>
