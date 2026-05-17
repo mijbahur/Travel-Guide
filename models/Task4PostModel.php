@@ -1,6 +1,6 @@
 <?php
 // Task 4 Post Model - Browse, Search & Filter approved posts for users
-require_once __DIR__ . '/../config/db.php';
+require_once __DIR__ . '/../config/database.php';
 
 /**
  * Get all approved posts for browsing
