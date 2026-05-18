@@ -344,7 +344,7 @@ $costData = getTask4BaseCost($postId, $post['cost_level']);
                 <p><?php echo htmlspecialchars($post['short_history']); ?></p>
                 <p><strong>Travel Medium Info:</strong> <?php echo htmlspecialchars($post['travel_medium_info']); ?></p>
                 <?php if (!empty($post['image'])): ?>
-                    <img src="../../public/uploads/<?php echo htmlspecialchars($post['image']); ?>" alt="Post Image" class="post-image">
+                    <img src="<?php echo htmlspecialchars($post['image']); ?>" alt="<?php echo htmlspecialchars($post['title']); ?>" class="post-image">
                 <?php endif; ?>
             </div>
         </div>

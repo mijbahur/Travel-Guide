@@ -2,7 +2,6 @@
 session_start();
 require_once __DIR__ . '/../../models/Task4PostModel.php';
 
-// Fetch all approved posts for initial page load
 $posts = getApprovedPostsForBrowse();
 ?>
 <!DOCTYPE html>
@@ -10,7 +9,7 @@ $posts = getApprovedPostsForBrowse();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Browse Travel Posts</title>
+    <title>Travel Guide | Browse Posts</title>
     <style>
         * {
             margin: 0;
@@ -21,100 +20,83 @@ $posts = getApprovedPostsForBrowse();
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #eef2f7;
-            color: #2a3a4a;
+            color: #263238;
         }
 
         .container {
-            max-width: 1100px;
+            width: min(1120px, 100%);
             margin: 0 auto;
-            padding: 25px 20px 40px;
+            padding: 24px 18px 32px;
         }
 
-        h1 {
+        .page-title {
             text-align: center;
+            margin-bottom: 24px;
             color: #1f3a5d;
-            margin-bottom: 25px;
-            font-size: 2.2rem;
+            font-size: 2rem;
             letter-spacing: 0.02em;
         }
 
-        .search-filter-section {
-            background: #ffffff;
-            border-radius: 18px;
-            padding: 24px;
-            margin-bottom: 32px;
-            box-shadow: 0 18px 40px rgba(41, 56, 77, 0.08);
-            border: 1px solid rgba(34, 60, 80, 0.08);
+        .search-panel {
+            background: #fff;
+            border: 1px solid #dce3ea;
+            border-radius: 16px;
+            padding: 22px;
+            box-shadow: 0 12px 30px rgba(40, 58, 84, 0.08);
+            margin-bottom: 28px;
         }
 
-        .search-box {
-            margin-bottom: 24px;
-        }
-
-        .search-box input {
-            width: 100%;
-            padding: 14px 18px;
-            font-size: 16px;
-            border: 1px solid #d7dde6;
-            border-radius: 14px;
-            transition: border-color 0.25s ease, box-shadow 0.25s ease;
-            background-color: #f8fbff;
-        }
-
-        .search-box input:focus {
-            outline: none;
-            border-color: #4a90e2;
-            box-shadow: 0 0 0 4px rgba(74, 144, 226, 0.12);
-        }
-
-        .filters {
+        .form-grid {
             display: grid;
-            grid-template-columns: repeat(4, minmax(170px, 1fr));
-            gap: 18px;
+            gap: 16px;
+            grid-template-columns: 1.5fr 1fr 1fr 1fr;
             align-items: end;
         }
 
-        .filter-group {
+        .form-group {
             display: flex;
             flex-direction: column;
             gap: 8px;
         }
 
-        .filter-group label {
-            color: #465a74;
-            font-size: 14px;
+        label {
             font-weight: 600;
+            color: #4a5a6a;
+            font-size: 0.95rem;
         }
 
-        .filter-group select {
+        input[type="text"], select {
             width: 100%;
-            padding: 12px 14px;
+            min-height: 44px;
             border: 1px solid #d7dde6;
             border-radius: 12px;
-            background-color: #fafcff;
-            color: #2a3a4a;
-            font-size: 14px;
-            transition: border-color 0.25s ease, box-shadow 0.25s ease;
+            padding: 12px 14px;
+            background: #f8fbff;
+            color: #27323f;
+            font-size: 0.95rem;
         }
 
-        .filter-group select:focus {
-            outline: none;
+        input[type="text"]:focus,
+        select:focus {
+            outline: 2px solid rgba(74, 144, 226, 0.18);
             border-color: #4a90e2;
-            box-shadow: 0 0 0 4px rgba(74, 144, 226, 0.12);
+        }
+
+        .btn-reset,
+        .btn-primary {
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 0.95rem;
         }
 
         .btn-reset {
-            width: 100%;
-            padding: 14px 18px;
-            margin-top: 6px;
             background: #1f3a5d;
-            color: #ffffff;
-            border: none;
-            border-radius: 12px;
-            font-size: 14px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: background 0.25s ease, transform 0.2s ease;
+            color: #fff;
+            padding: 12px 18px;
+            min-height: 44px;
+            transition: transform 0.2s ease, background 0.2s ease;
         }
 
         .btn-reset:hover {
@@ -124,196 +106,129 @@ $posts = getApprovedPostsForBrowse();
 
         .post-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 24px;
-            margin-top: 10px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 22px;
         }
 
-        .post-card {
-            background: #ffffff;
+        .card {
+            background: #fff;
             border-radius: 18px;
+            border: 1px solid #dce3ea;
             overflow: hidden;
-            border: 1px solid rgba(34, 60, 80, 0.08);
-            box-shadow: 0 12px 30px rgba(34, 60, 80, 0.08);
-            transition: transform 0.25s ease, box-shadow 0.25s ease;
+            box-shadow: 0 14px 32px rgba(40, 58, 84, 0.08);
             display: flex;
             flex-direction: column;
             min-height: 320px;
         }
 
-        .post-card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 26px 45px rgba(34, 60, 80, 0.12);
+        .card-header {
+            padding: 20px;
+            background: #f7fbff;
         }
 
-        .post-header {
-            padding: 22px 20px 16px;
-            background-color: #f7fbff;
-        }
-
-        .post-header h2 {
-            font-size: 1.35rem;
+        .card-header h2 {
+            font-size: 1.3rem;
             color: #1f3a5d;
-            line-height: 1.35;
+            line-height: 1.2;
+        }
+
+        .card-body {
+            padding: 18px 20px 20px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
         .post-meta {
-            padding: 0 20px 18px;
             display: flex;
             flex-wrap: wrap;
             gap: 10px;
+            margin-bottom: 14px;
         }
 
         .badge {
-            display: inline-flex;
-            align-items: center;
-            padding: 7px 13px;
+            padding: 8px 14px;
             border-radius: 999px;
-            font-size: 12px;
+            font-size: 0.78rem;
             font-weight: 700;
-            letter-spacing: 0.01em;
+            color: #fff;
         }
 
         .badge-country {
-            background-color: #e8f5ff;
-            color: #165d9f;
+            background: #1f3a5d;
         }
 
         .badge-genre {
-            background-color: #f6edf9;
-            color: #7b3b8a;
+            background: #7b3b8a;
         }
 
         .badge-cost {
-            color: #ffffff;
+            background: #2d9a57;
         }
 
-        .cost-low {
-            background-color: #2d9a57;
-        }
-
-        .cost-medium {
-            background-color: #e18f24;
-        }
-
-        .cost-high {
-            background-color: #d64545;
-        }
-
-        .post-content {
-            padding: 0 20px 20px;
-            flex-grow: 1;
-        }
-
-        .post-content p {
-            line-height: 1.8;
+        .card-body p {
             color: #4a5b72;
-            font-size: 0.96rem;
+            line-height: 1.7;
+            font-size: 0.95rem;
+            margin-bottom: 18px;
         }
 
-        .post-footer {
-            padding: 18px 20px 22px;
-            border-top: 1px solid rgba(34, 60, 80, 0.06);
-            background-color: #fbfdff;
+        .card-footer {
+            padding: 0 20px 20px;
         }
 
-        .btn-read-more {
+        .btn-primary {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            padding: 12px 22px;
-            background-color: #4a90e2;
-            color: #ffffff;
+            padding: 12px 18px;
+            background: #4a90e2;
+            color: #fff;
             text-decoration: none;
-            border-radius: 12px;
-            font-weight: 700;
-            transition: background-color 0.25s ease, transform 0.2s ease;
+            transition: background 0.2s ease, transform 0.2s ease;
         }
 
-        .btn-read-more:hover {
-            background-color: #3a78c2;
+        .btn-primary:hover {
+            background: #3a78c2;
             transform: translateY(-1px);
         }
 
-        .no-posts {
-            text-align: center;
-            padding: 40px 20px;
-            color: #62738f;
-            font-size: 1rem;
+        .empty-message {
             grid-column: 1 / -1;
+            color: #5e6f85;
+            padding: 32px 0;
+            text-align: center;
+            font-size: 1rem;
         }
 
         @media (max-width: 900px) {
-            .filters {
-                grid-template-columns: repeat(2, minmax(170px, 1fr));
+            .form-grid {
+                grid-template-columns: 1fr;
             }
         }
 
-        @media (max-width: 700px) {
+        @media (max-width: 600px) {
             .container {
-                padding: 18px 14px 30px;
-            }
-            
-            h1 {
-                font-size: 1.9rem;
-                margin-bottom: 20px;
-            }
-            
-            .search-filter-section {
-                padding: 20px;
-            }
-            
-            .filters {
-                grid-template-columns: 1fr;
-            }
-            
-            .btn-reset {
-                width: 100%;
-            }
-            
-            .post-grid {
-                grid-template-columns: 1fr;
-                gap: 20px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .search-box input,
-            .filter-group select {
-                font-size: 15px;
-            }
-            
-            .post-header h2 {
-                font-size: 1.2rem;
-            }
-            
-            .post-content p {
-                font-size: 0.95rem;
-            }
-            
-            .btn-read-more {
-                width: 100%;
+                padding: 18px 14px 26px;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Browse Travel Posts</h1>
-        
-        <div class="search-filter-section">
-            <div class="search-box">
-                <input 
-                    type="text" 
-                    id="searchBox" 
-                    placeholder="Search by title or country..." 
-                    autocomplete="off"
-                >
-            </div>
-            
-            <div class="filters">
-                <div class="filter-group">
-                    <label for="countryFilter">Country:</label>
+    <main class="container">
+        <header class="page-title">
+            <h1>Travel Guide: Approved Posts</h1>
+        </header>
+
+        <section class="search-panel" aria-label="Post filters">
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="searchBox">Search</label>
+                    <input id="searchBox" type="text" placeholder="Find posts by title or country" autocomplete="off">
+                </div>
+                <div class="form-group">
+                    <label for="countryFilter">Country</label>
                     <select id="countryFilter">
                         <option value="">All Countries</option>
                         <option value="USA">USA</option>
@@ -328,9 +243,8 @@ $posts = getApprovedPostsForBrowse();
                         <option value="Australia">Australia</option>
                     </select>
                 </div>
-                
-                <div class="filter-group">
-                    <label for="genreFilter">Genre:</label>
+                <div class="form-group">
+                    <label for="genreFilter">Genre</label>
                     <select id="genreFilter">
                         <option value="">All Genres</option>
                         <option value="Adventure">Adventure</option>
@@ -343,9 +257,8 @@ $posts = getApprovedPostsForBrowse();
                         <option value="Wildlife">Wildlife</option>
                     </select>
                 </div>
-                
-                <div class="filter-group">
-                    <label for="costFilter">Cost Level:</label>
+                <div class="form-group">
+                    <label for="costFilter">Cost Level</label>
                     <select id="costFilter">
                         <option value="">All Costs</option>
                         <option value="low">Low</option>
@@ -353,51 +266,47 @@ $posts = getApprovedPostsForBrowse();
                         <option value="high">High</option>
                     </select>
                 </div>
-                
-                <button id="resetFilters" class="btn-reset">Reset Filters</button>
+                <button id="resetFilters" class="btn-reset" type="button">Reset Filters</button>
             </div>
-        </div>
-        
-        <div id="postGrid" class="post-grid">
+        </section>
+
+        <section class="post-grid" id="postGrid">
             <?php if (empty($posts)): ?>
-                <p class="no-posts">No posts found.</p>
+                <p class="empty-message">No approved posts found.</p>
             <?php else: ?>
                 <?php foreach ($posts as $post): ?>
-                    <div class="post-card">
-                        <div class="post-header">
+                    <article class="card post-card">
+                        <div class="card-header">
                             <h2><?php echo htmlspecialchars($post['title']); ?></h2>
                         </div>
-                        <div class="post-meta">
-                            <span class="badge badge-country"><?php echo htmlspecialchars($post['country']); ?></span>
-                            <span class="badge badge-genre"><?php echo htmlspecialchars($post['genre']); ?></span>
-                            <span class="badge badge-cost cost-<?php echo htmlspecialchars($post['cost_level']); ?>">
-                                <?php echo htmlspecialchars(ucfirst($post['cost_level'])); ?>
-                            </span>
+                        <div class="card-body">
+                            <div class="post-meta">
+                                <span class="badge badge-country"><?php echo htmlspecialchars($post['country']); ?></span>
+                                <span class="badge badge-genre"><?php echo htmlspecialchars($post['genre']); ?></span>
+                                <span class="badge badge-cost cost-<?php echo htmlspecialchars($post['cost_level']); ?>">
+                                    <?php echo htmlspecialchars(ucfirst($post['cost_level'])); ?>
+                                </span>
+                            </div>
+                            <p><?php echo htmlspecialchars(mb_substr($post['short_history'], 0, 140)); ?>...</p>
                         </div>
-                        <div class="post-content">
-                            <p><?php echo htmlspecialchars(substr($post['short_history'], 0, 150)); ?>...</p>
+                        <div class="card-footer">
+                            <a class="btn btn-primary" href="details.php?id=<?php echo (int) $post['id']; ?>">Read More</a>
                         </div>
-                        <div class="post-footer">
-                            <a href="details.php?id=<?php echo (int)$post['id']; ?>" class="btn-read-more">
-                                Read More
-                            </a>
-                        </div>
-                    </div>
+                    </article>
                 <?php endforeach; ?>
             <?php endif; ?>
-        </div>
-    </div>
+        </section>
+    </main>
 
     <script>
         const searchBox = document.getElementById('searchBox');
         const countryFilter = document.getElementById('countryFilter');
         const genreFilter = document.getElementById('genreFilter');
-        const costFilter = document.getElementById('costFilter');
         const resetFilters = document.getElementById('resetFilters');
         const postGrid = document.getElementById('postGrid');
 
-        function escapeHtml(unsafe) {
-            return unsafe
+        function escapeHtml(value) {
+            return String(value)
                 .replace(/&/g, '&amp;')
                 .replace(/</g, '&lt;')
                 .replace(/>/g, '&gt;')
@@ -407,84 +316,70 @@ $posts = getApprovedPostsForBrowse();
 
         function renderPosts(posts) {
             if (!posts || posts.length === 0) {
-                postGrid.innerHTML = '<p class="no-posts">No posts found.</p>';
+                postGrid.innerHTML = '<p class="empty-message">No approved posts found.</p>';
                 return;
             }
 
-            postGrid.innerHTML = posts.map(post => `
-                <div class="post-card">
-                    <div class="post-header">
-                        <h2>${escapeHtml(post.title)}</h2>
-                    </div>
-                    <div class="post-meta">
-                        <span class="badge badge-country">${escapeHtml(post.country)}</span>
-                        <span class="badge badge-genre">${escapeHtml(post.genre)}</span>
-                        <span class="badge badge-cost cost-${escapeHtml(post.cost_level)}">
-                            ${escapeHtml(post.cost_level.charAt(0).toUpperCase() + post.cost_level.slice(1))}
-                        </span>
-                    </div>
-                    <div class="post-content">
-                        <p>${escapeHtml(post.short_history.substring(0, 150))}...</p>
-                    </div>
-                    <div class="post-footer">
-                        <a href="details.php?id=${post.id}" class="btn-read-more">Read More</a>
-                    </div>
-                </div>
-            `).join('');
+            postGrid.innerHTML = posts.map(post => {
+                const title = escapeHtml(post.title);
+                const country = escapeHtml(post.country);
+                const genre = escapeHtml(post.genre);
+                const costLevel = escapeHtml(post.cost_level);
+                const excerpt = escapeHtml(post.short_history.substring(0, 140));
+
+                return `
+                    <article class="card post-card">
+                        <div class="card-header">
+                            <h2>${title}</h2>
+                        </div>
+                        <div class="card-body">
+                            <div class="post-meta">
+                                <span class="badge badge-country">${country}</span>
+                                <span class="badge badge-genre">${genre}</span>
+                                <span class="badge badge-cost cost-${costLevel}">${costLevel.charAt(0).toUpperCase() + costLevel.slice(1)}</span>
+                            </div>
+                            <p>${excerpt}...</p>
+                        </div>
+                        <div class="card-footer">
+                            <a class="btn btn-primary" href="details.php?id=${encodeURIComponent(post.id)}">Read More</a>
+                        </div>
+                    </article>
+                `;
+            }).join('');
         }
 
-        async function performSearch() {
-            const query = searchBox.value.trim();
-            try {
-                const response = await fetch(`../../controllers/Task4PostController.php?action=search&q=${encodeURIComponent(query)}`);
-                const data = await response.json();
-                if (data.success) {
-                    renderPosts(data.posts);
-                } else {
-                    postGrid.innerHTML = '<p class="no-posts">No posts found.</p>';
-                }
-            } catch (error) {
-                console.error('Search error:', error);
-                postGrid.innerHTML = '<p class="no-posts">No posts found.</p>';
-            }
+        async function requestPosts(action, params) {
+            const response = await fetch(`../../controllers/Task4PostController.php?action=${action}&${params}`);
+            return await response.json();
         }
 
-        async function performFilter() {
-            const country = countryFilter.value;
-            const genre = genreFilter.value;
-            const costLevel = costFilter.value;
+        async function updateSearch() {
+            const params = new URLSearchParams({ q: searchBox.value.trim() });
+            const data = await requestPosts('search', params.toString());
+            renderPosts(data.success ? data.posts : []);
+        }
+
+        async function updateFilter() {
             const params = new URLSearchParams();
-            if (country) params.append('country', country);
-            if (genre) params.append('genre', genre);
-            if (costLevel) params.append('cost_level', costLevel);
-
-            try {
-                const response = await fetch(`../../controllers/Task4PostController.php?action=filter&${params.toString()}`);
-                const data = await response.json();
-                if (data.success) {
-                    renderPosts(data.posts);
-                } else {
-                    postGrid.innerHTML = '<p class="no-posts">No posts found.</p>';
-                }
-            } catch (error) {
-                console.error('Filter error:', error);
-                postGrid.innerHTML = '<p class="no-posts">No posts found.</p>';
+            if (countryFilter.value) {
+                params.append('country', countryFilter.value);
             }
+            if (genreFilter.value) {
+                params.append('genre', genreFilter.value);
+            }
+            const data = await requestPosts('filter', params.toString());
+            renderPosts(data.success ? data.posts : []);
         }
 
-        async function resetAllFilters() {
+        searchBox.addEventListener('input', updateSearch);
+        countryFilter.addEventListener('change', updateFilter);
+        genreFilter.addEventListener('change', updateFilter);
+        resetFilters.addEventListener('click', () => {
             searchBox.value = '';
             countryFilter.value = '';
             genreFilter.value = '';
-            costFilter.value = '';
-            await performSearch();
-        }
-
-        searchBox.addEventListener('input', performSearch);
-        countryFilter.addEventListener('change', performFilter);
-        genreFilter.addEventListener('change', performFilter);
-        costFilter.addEventListener('change', performFilter);
-        resetFilters.addEventListener('click', resetAllFilters);
+            updateSearch();
+        });
     </script>
 </body>
 </html>
