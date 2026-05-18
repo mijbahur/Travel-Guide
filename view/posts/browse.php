@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once __DIR__ . '/../../models/Task4PostModel.php';
+require_once __DIR__ . '/../../model/Task4PostModel.php';
 
 $posts = getApprovedPostsForBrowse();
 ?>

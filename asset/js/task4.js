@@ -57,7 +57,7 @@ function renderPosts(posts) {
 
 // Request posts from controller
 async function requestPosts(action, params) {
-    const response = await fetch(`../../controllers/Task4/Task4PostController.php?action=${action}&${params}`);
+    const response = await fetch(`../../controller/Task4/Task4PostController.php?action=${action}&${params}`);
     return await response.json();
 }
 
@@ -141,7 +141,7 @@ async function addComment(event) {
 
     const formData = new FormData(commentForm);
     try {
-        const response = await fetch(`../../controllers/Task4/Task4CommentController.php?action=add`, {
+        const response = await fetch(`../../controller/Task4/Task4CommentController.php?action=add`, {
             method: 'POST',
             body: formData
         });
@@ -184,7 +184,7 @@ async function deleteComment(event) {
     formData.append('comment_id', commentId);
 
     try {
-        const response = await fetch(`../../controllers/Task4/Task4CommentController.php?action=delete`, {
+        const response = await fetch(`../../controller/Task4/Task4CommentController.php?action=delete`, {
             method: 'POST',
             body: formData
         });
@@ -234,7 +234,7 @@ async function calculateCost() {
     formData.append('days', days);
 
     try {
-        const response = await fetch(`../../controllers/Task4/Task4CostController.php?action=estimate`, {
+        const response = await fetch(`../../controller/Task4/Task4CostController.php?action=estimate`, {
             method: 'POST',
             body: formData
         });

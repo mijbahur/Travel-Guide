@@ -1,7 +1,7 @@
 <?php
 require_once __DIR__ . '/../../config/auth.php';
-require_once __DIR__ . '/../../models/Task4PostModel.php';
-require_once __DIR__ . '/../../models/Task4CostModel.php';
+require_once __DIR__ . '/../../model/Task4PostModel.php';
+require_once __DIR__ . '/../../model/Task4CostModel.php';
 
 class Task4CostController
 {

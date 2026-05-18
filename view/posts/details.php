@@ -9,9 +9,9 @@ if (!isset($_SESSION['user_id'])) {
     $_SESSION['is_verified'] = 1;
 }
 
-require_once __DIR__ . '/../../models/Task4PostModel.php';
-require_once __DIR__ . '/../../models/Task4CommentModel.php';
-require_once __DIR__ . '/../../models/Task4CostModel.php';
+require_once __DIR__ . '/../../model/Task4PostModel.php';
+require_once __DIR__ . '/../../model/Task4CommentModel.php';
+require_once __DIR__ . '/../../model/Task4CostModel.php';
 
 // Validate post ID
 $postId = isset($_GET['id']) ? (int)$_GET['id'] : 0;
