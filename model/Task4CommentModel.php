@@ -1,6 +1,7 @@
 <?php
 // Task 4 Comment Model - Manage comments on posts
-require_once __DIR__ . '/../config/auth.php';
+require_once __DIR__ . '/../config/auth/auth.php';
+require_once __DIR__ . '/db.php';
 
 /**
  * Get all comments for a post with user information
