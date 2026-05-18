@@ -1,13 +1,12 @@
 <?php
-// session_start only if not already started
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-// Auto-login via Remember Me cookie
+// cookie
 if (!isset($_SESSION['user_id']) && isset($_COOKIE['remember_token'])) {
     $rootPath = __DIR__ . '/../../';
-    require_once $rootPath . 'model/UserModel.php';
+    require_once $rootPath . 'model/user/UserModel.php';
     $tokenHash = hash('sha256', $_COOKIE['remember_token']);
     $user = getUserByRememberToken($tokenHash);
     if ($user) {
@@ -43,7 +42,7 @@ $name     = $_SESSION['name'] ?? '';
         <?php elseif (!$verified): ?>
             <span style="color:#cce0f5;font-size:13px;">Hi, <?= htmlspecialchars($name) ?></span>
             <a href="<?= $baseUrl ?? '../' ?>view/profile/index.php">Profile</a>
-            <a href="<?= $baseUrl ?? '../' ?>controller/AuthController.php?action=logout" class="btn-nav">Logout</a>
+            <a href="<?= $baseUrl ?? '../' ?>controller/auth/AuthController.php?action=logout" class="btn-nav">Logout</a>
 
         <?php else: ?>
             <a href="<?= $baseUrl ?? '../' ?>index.php">Home</a>
@@ -61,7 +60,7 @@ $name     = $_SESSION['name'] ?? '';
             <?php endif; ?>
 
             <a href="<?= $baseUrl ?? '../' ?>view/profile/index.php">Profile</a>
-            <a href="<?= $baseUrl ?? '../' ?>controller/AuthController.php?action=logout" class="btn-nav">Logout</a>
+            <a href="<?= $baseUrl ?? '../' ?>controller/auth/AuthController.php?action=logout" class="btn-nav">Logout</a>
         <?php endif; ?>
     </nav>
 </div>

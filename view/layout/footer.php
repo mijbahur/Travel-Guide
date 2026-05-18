@@ -1,6 +1,6 @@
 
 <div class="footer">
-    &copy; <?= date('Y') ?> Travel Guide — Web Technologies Project
+    &copy; <?= date('Y') ?> Travel Guide
 </div>
 
 </body>

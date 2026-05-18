@@ -6,7 +6,7 @@ if (!isset($_SESSION['user_id'])) {
     exit;
 }
 
-require_once '../../model/UserModel.php';
+require_once '../../model/user/UserModel.php';
 
 $pageTitle = 'My Profile — Travel Guide';
 $baseUrl   = '../../';
@@ -51,7 +51,7 @@ unset($_SESSION['errors']);
             </div>
         </div>
 
-        <form id="profileForm" method="POST" action="../../controller/ProfileController.php?action=update" enctype="multipart/form-data" novalidate>
+        <form id="profileForm" method="POST" action="../../controller/profile/ProfileController.php?action=update" enctype="multipart/form-data" novalidate>
 
             <div class="form-row">
                 <div class="form-group">
@@ -80,7 +80,7 @@ unset($_SESSION['errors']);
     <div class="card">
         <h2>Change Password</h2>
 
-        <form id="passwordForm" method="POST" action="../../controller/ProfileController.php?action=changePassword" novalidate>
+        <form id="passwordForm" method="POST" action="../../controller/profile/ProfileController.php?action=changePassword" novalidate>
 
             <div class="form-group">
                 <label for="current_password">Current Password</label>

@@ -11,7 +11,7 @@ if ($_SESSION['role'] !== 'user' || !$_SESSION['is_verified']) {
     exit;
 }
 
-require_once '../../model/WishlistModel.php';
+require_once '../../model/wishlist/WishlistModel.php';
 
 $pageTitle = 'My Wishlist — Travel Guide';
 $baseUrl   = '../../';
@@ -72,7 +72,7 @@ function showToast(msg, isError = false) {
 function removeWishlist(postId, btn) {
     if (!confirm('Remove this place from your wishlist?')) return;
 
-    fetch('../../controller/WishlistController.php?action=remove', {
+    fetch('../../controller/wishlist/WishlistController.php?action=remove', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ post_id: postId })

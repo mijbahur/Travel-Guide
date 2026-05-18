@@ -2,11 +2,11 @@
 if (session_status() === PHP_SESSION_NONE) session_start();
 
 if (!isset($_SESSION['user_id'])) {
-    header('location: ../view/auth/login.php');
+    header('location: ../../view/auth/login.php');
     exit;
 }
 
-require_once __DIR__ . '/../model/UserModel.php';
+require_once __DIR__ . '/../../model/user/UserModel.php';
 
 $action = $_GET['action'] ?? 'show';
 
@@ -15,14 +15,13 @@ if ($action === 'update') {
 } elseif ($action === 'changePassword') {
     handleChangePassword();
 } else {
-    header('location: ../view/profile/index.php');
+    header('location: ../../view/profile/index.php');
     exit;
 }
 
-// ── UPDATE PROFILE ────────────────────────────────────────────────
 function handleUpdateProfile() {
     if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-        header('location: ../view/profile/index.php');
+        header('location: ../../view/profile/index.php');
         exit;
     }
 
@@ -34,7 +33,6 @@ function handleUpdateProfile() {
     if ($name === '')                               $errors[] = "Name is required.";
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) $errors[] = "Invalid email address.";
 
-    // Check email unique (exclude current user)
     if (empty($errors)) {
         $existing = getUserByEmail($email);
         if ($existing && $existing['id'] != $id) {
@@ -42,12 +40,11 @@ function handleUpdateProfile() {
         }
     }
 
-    // Handle profile picture upload
     $picturePath = null;
     if (!empty($_FILES['profile_picture']['name'])) {
         $file    = $_FILES['profile_picture'];
         $allowed = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
-        $maxSize = 2 * 1024 * 1024; // 2MB
+        $maxSize = 2 * 1024 * 1024;
 
         $finfo    = finfo_open(FILEINFO_MIME_TYPE);
         $mimeType = finfo_file($finfo, $file['tmp_name']);
@@ -59,7 +56,7 @@ function handleUpdateProfile() {
         if (empty($errors)) {
             $ext         = pathinfo($file['name'], PATHINFO_EXTENSION);
             $filename    = 'user_' . $id . '_' . time() . '.' . $ext;
-            $destination = __DIR__ . '/../asset/img/' . $filename;
+            $destination = __DIR__ . '/../../asset/img/' . $filename;
             if (move_uploaded_file($file['tmp_name'], $destination)) {
                 $picturePath = $filename;
             } else {
@@ -70,23 +67,21 @@ function handleUpdateProfile() {
 
     if (!empty($errors)) {
         $_SESSION['errors'] = $errors;
-        header('location: ../view/profile/index.php');
+        header('location: ../../view/profile/index.php');
         exit;
     }
 
     updateUserProfile($id, $name, $email, $picturePath);
-
     $_SESSION['name']       = $name;
     $_SESSION['flash']      = "Profile updated successfully!";
     $_SESSION['flash_type'] = 'success';
-    header('location: ../view/profile/index.php');
+    header('location: ../../view/profile/index.php');
     exit;
 }
 
-// ── CHANGE PASSWORD ───────────────────────────────────────────────
 function handleChangePassword() {
     if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-        header('location: ../view/profile/index.php');
+        header('location: ../../view/profile/index.php');
         exit;
     }
 
@@ -109,15 +104,14 @@ function handleChangePassword() {
 
     if (!empty($errors)) {
         $_SESSION['errors'] = $errors;
-        header('location: ../view/profile/index.php');
+        header('location: ../../view/profile/index.php');
         exit;
     }
 
     $hash = password_hash($new, PASSWORD_DEFAULT);
     updateUserPassword($id, $hash);
-
     $_SESSION['flash']      = "Password changed successfully!";
     $_SESSION['flash_type'] = 'success';
-    header('location: ../view/profile/index.php');
+    header('location: ../../view/profile/index.php');
     exit;
 }
