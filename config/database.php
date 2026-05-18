@@ -1,7 +1,5 @@
 <?php
 
-	// PDO database configuration for Task 4 MVC
-	// Use 127.0.0.1 (TCP) instead of 'localhost' (socket) to avoid socket/auth issues
 	$host = '127.0.0.1';
 	$dbname = 'travel_guide';
 	$username = 'root';
