@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once __DIR__ . '/../../config/auth.php';
+require_once __DIR__ . '/../../config/auth/auth.php';
 requireVerified();
 
 require_once __DIR__ . '/../../model/postRequestModel.php';
@@ -22,7 +22,7 @@ $activePage = 'my-requests';
     <?php include 'partials/navbar.php'; ?>
 
     <div class="container">
-        <div class="d-flex align-center justify-between" style="margin-bottom:1.5rem">
+        <div class="myRequest" style="margin-bottom:1.5rem">
             <h1 class="page-title" style="margin-bottom:0">&#128203; My Post Requests</h1>
             <a href="create_request.php" class="btn btn-primary">+ New Request</a>
         </div>
@@ -88,3 +88,5 @@ $activePage = 'my-requests';
 </body>
 
 </html>
+
+<?php include '../../view/layout/footer.php'; ?>

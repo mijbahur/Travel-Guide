@@ -9,7 +9,7 @@ function deleteRequest(id) {
     let xhttp = new XMLHttpRequest();
     xhttp.open('POST', '../../api/delete_request.php', true);
     xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-    xhttp.send('id=' + id + csrfToken);
+    xhttp.send('id=' + id + '&csrf_token=' + csrfToken);
 
     xhttp.onreadystatechange = function () {
         if (this.readyState === 4 && this.status === 200) {

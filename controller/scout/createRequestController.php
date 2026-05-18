@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once __DIR__ . '/../../config/auth.php';
+require_once __DIR__ . '/../../config/auth/auth.php';
 requireVerified();
 
 require_once __DIR__ . '/../fileUpload.php';

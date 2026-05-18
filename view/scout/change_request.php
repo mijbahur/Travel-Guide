@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . '/../../config/auth.php';
+require_once __DIR__ . '/../../config/auth/auth.php';
 requireVerified();
 
 $activePage = 'approved';
@@ -15,7 +15,7 @@ if (empty($_SESSION['csrf_token'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Request Change - Travel Guide</title>
-    <link rel="stylesheet" href="../../asser/css/style.css">
+    <link rel="stylesheet" href="../../asset/css/style.css">
 </head>
 
 <body>
@@ -77,9 +77,9 @@ if (empty($_SESSION['csrf_token'])) {
 
                 <div class="form-group">
                     <label>Cost Level *</label>
-                    <div class="d-flex gap-2 mt-1">
+                    <div class="cost-level">
                         <?php foreach (['low', 'medium', 'high'] as $c): ?>
-                            <label style="font-weight:400;cursor:pointer">
+                            <label style="font-weight:400;cursor:pointer;display:flex;align-items:center;gap:6px;">
                                 <input type="radio" name="cost_level" value="<?= $c ?>" 
                                 <?= ($old['cost_level'] ?? $post['cost_level']) === $c ? 'checked' : '' ?>>
                                 <?= ucfirst($c) ?>
@@ -174,3 +174,5 @@ if (empty($_SESSION['csrf_token'])) {
 </body>
 
 </html>
+
+<?php include '../../view/layout/footer.php'; ?>

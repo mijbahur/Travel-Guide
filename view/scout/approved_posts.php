@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once __DIR__ . '/../../config/auth.php';
+require_once __DIR__ . '/../../config/auth/auth.php';
 requireVerified();
 
 require_once __DIR__ . '/../../model/postRequestModel.php';
@@ -15,7 +15,7 @@ $activePage = 'approved';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Approved Posts - Travel Guide</title>
-    <link rel="stylesheet" href="../../public/style.css">
+    <link rel="stylesheet" href="../../asset/css/style.css">
 </head>
 
 <body>
@@ -63,3 +63,5 @@ $activePage = 'approved';
 </body>
 
 </html>
+
+<?php include '../../view/layout/footer.php'; ?>
