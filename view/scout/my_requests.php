@@ -84,7 +84,7 @@ $activePage = 'my-requests';
     <script>
         const csrfToken = "<?= $_SESSION['csrf_token'] ?? '' ?>";
     </script>
-    <script src="../../asset/js/script.js"></script>
+    <script src="../../asset/js/deletePost.js"></script>
 </body>
 
 </html>
