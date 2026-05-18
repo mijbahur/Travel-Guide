@@ -1,7 +1,7 @@
 <?php
 session_start();
-// require_once('/../../config/auth.php');
-require_once __DIR__ . '/../../config/auth.php';
+//require_once('/../../config/auth.php');
+require_once __DIR__ . '/../../config/auth/auth.php';
 requireRole('scout');
 
 require_once __DIR__ . '/../../model/postRequestModel.php';
