@@ -12,28 +12,38 @@ if ($action === 'register') {
 } elseif ($action === 'logout') {
     handleLogout();
 } else {
-    header('location: ../../index.php');
+    if ($user['role'] === 'scout' && $user['is_verified']) {
+        header('location: ../../view/scout/dashboard.php');
+    } else {
+        header('location: ../../index.php');
+    }
     exit;
 }
 
-function handleRegister() {
+function handleRegister()
+{
     if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
         header('location: ../../view/auth/register.php');
         exit;
     }
 
-    $name     = trim($_POST['name'] ?? '');
-    $email    = trim($_POST['email'] ?? '');
+    $name = trim($_POST['name'] ?? '');
+    $email = trim($_POST['email'] ?? '');
     $password = $_POST['password'] ?? '';
-    $confirm  = $_POST['confirm_password'] ?? '';
-    $role     = $_POST['role'] ?? 'user';
+    $confirm = $_POST['confirm_password'] ?? '';
+    $role = $_POST['role'] ?? 'user';
 
     $errors = [];
-    if ($name === '')                               $errors[] = "Name is required.";
-    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) $errors[] = "Invalid email address.";
-    if (strlen($password) < 8)                     $errors[] = "Password must be at least 8 characters.";
-    if ($password !== $confirm)                    $errors[] = "Passwords do not match.";
-    if (!in_array($role, ['admin', 'scout', 'user'])) $errors[] = "Invalid role selected.";
+    if ($name === '')
+        $errors[] = "Name is required.";
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL))
+        $errors[] = "Invalid email address.";
+    if (strlen($password) < 8)
+        $errors[] = "Password must be at least 8 characters.";
+    if ($password !== $confirm)
+        $errors[] = "Passwords do not match.";
+    if (!in_array($role, ['admin', 'scout', 'user']))
+        $errors[] = "Invalid role selected.";
 
     if (empty($errors) && getUserByEmail($email)) {
         $errors[] = "This email is already registered.";
@@ -41,7 +51,7 @@ function handleRegister() {
 
     if (!empty($errors)) {
         $_SESSION['errors'] = $errors;
-        $_SESSION['old']    = compact('name', 'email', 'role');
+        $_SESSION['old'] = compact('name', 'email', 'role');
         header('location: ../../view/auth/register.php');
         exit;
     }
@@ -49,29 +59,32 @@ function handleRegister() {
     $hash = password_hash($password, PASSWORD_DEFAULT);
     createUser($name, $email, $hash, $role);
 
-    $_SESSION['flash']      = "Registration successful! Please wait for admin approval before logging in.";
+    $_SESSION['flash'] = "Registration successful! Please wait for admin approval before logging in.";
     $_SESSION['flash_type'] = 'success';
     header('location: ../../view/auth/login.php');
     exit;
 }
 
-function handleLogin() {
+function handleLogin()
+{
     if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
         header('location: ../../view/auth/login.php');
         exit;
     }
 
-    $email      = trim($_POST['email'] ?? '');
-    $password   = $_POST['password'] ?? '';
+    $email = trim($_POST['email'] ?? '');
+    $password = $_POST['password'] ?? '';
     $rememberMe = isset($_POST['remember_me']);
 
     $errors = [];
-    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) $errors[] = "Invalid email address.";
-    if ($password === '')                            $errors[] = "Password is required.";
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL))
+        $errors[] = "Invalid email address.";
+    if ($password === '')
+        $errors[] = "Password is required.";
 
     if (!empty($errors)) {
         $_SESSION['errors'] = $errors;
-        $_SESSION['old']    = ['email' => $email];
+        $_SESSION['old'] = ['email' => $email];
         header('location: ../../view/auth/login.php');
         exit;
     }
@@ -80,29 +93,36 @@ function handleLogin() {
 
     if (!$user || !password_verify($password, $user['password_hash'])) {
         $_SESSION['errors'] = ["Invalid email or password."];
-        $_SESSION['old']    = ['email' => $email];
+        $_SESSION['old'] = ['email' => $email];
         header('location: ../../view/auth/login.php');
         exit;
     }
 
-    $_SESSION['user_id']     = $user['id'];
-    $_SESSION['name']        = $user['name'];
-    $_SESSION['role']        = $user['role'];
+    $_SESSION['user_id'] = $user['id'];
+    $_SESSION['name'] = $user['name'];
+    $_SESSION['role'] = $user['role'];
     $_SESSION['is_verified'] = $user['is_verified'];
 
     if ($rememberMe) {
-        $token     = bin2hex(random_bytes(32));
+        $token = bin2hex(random_bytes(32));
         $tokenHash = hash('sha256', $token);
         setRememberToken($user['id'], $tokenHash);
         setcookie('remember_token', $token, time() + 30 * 24 * 3600, '/', '', false, true);
     }
 
-    header('location: ../../index.php');
+    if ($user['role'] === 'scout' && $user['is_verified']) {
+        header('location: ../../view/scout/dashboard.php');
+    } else {
+        header('location: ../../index.php');
+    }
+    exit;
     exit;
 }
 
-function handleLogout() {
-    if (session_status() === PHP_SESSION_NONE) session_start();
+function handleLogout()
+{
+    if (session_status() === PHP_SESSION_NONE)
+        session_start();
     if (isset($_SESSION['user_id'])) {
         clearRememberToken($_SESSION['user_id']);
     }

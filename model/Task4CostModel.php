@@ -1,6 +1,7 @@
 <?php
 // Task 4 Cost Model - Handle cost estimates for travel posts
-require_once __DIR__ . '/../config/auth.php';
+require_once __DIR__ . '/../config/auth/auth.php';
+require_once __DIR__ . '/db.php';
 
 /**
  * Get base cost for a post from database or use fallback mapping
