@@ -21,7 +21,7 @@ unset($_SESSION['errors'], $_SESSION['old']);
             </div>
         <?php endif; ?>
 
-        <form id="loginForm" method="POST" action="../../controller/AuthController.php?action=login" novalidate>
+        <form id="loginForm" method="POST" action="../../controller/auth/AuthController.php?action=login" novalidate>
 
             <div class="form-group">
                 <label for="email">Email</label>

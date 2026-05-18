@@ -1,7 +1,7 @@
 <?php
 if (session_status() === PHP_SESSION_NONE) session_start();
 
-$pageTitle = 'Home — Travel Guide';
+$pageTitle = 'Home Travel Guide';
 $baseUrl   = './';
 include './view/layout/header.php';
 
@@ -10,11 +10,11 @@ $verified = $_SESSION['is_verified'] ?? 0;
 $role     = $_SESSION['role'] ?? '';
 
 if ($loggedIn && $verified) {
-    require_once './model/UserModel.php';
+    require_once './model/user/UserModel.php';
     $posts        = getLatestApprovedPosts(6);
     $wishlistIds  = [];
     if ($role === 'user') {
-        require_once './model/WishlistModel.php';
+        require_once './model/wishlist/WishlistModel.php';
         $wishlistItems = getWishlistByUser($_SESSION['user_id']);
         foreach ($wishlistItems as $wi) {
             $wishlistIds[] = $wi['post_id'];
@@ -109,7 +109,7 @@ function toggleWishlist(postId, btn) {
     const isAdded = btn.classList.contains('added');
     const action  = isAdded ? 'remove' : 'add';
 
-    fetch('./controller/WishlistController.php?action=' + action, {
+    fetch('./controller/wishlist/WishlistController.php?action=' + action, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ post_id: postId })
