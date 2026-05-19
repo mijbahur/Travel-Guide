@@ -35,7 +35,7 @@ $activePage = 'approved';
                 <?php foreach ($posts as $post): ?>
                     <div class="post-card">
                         <?php if (!empty($post['image'])): ?>
-                            <img src="../../<?= htmlspecialchars($post['image']) ?>" alt="<?= htmlspecialchars($post['title']) ?>">
+                            <img src="../../asset/uploads/posts/<?= htmlspecialchars($post['image']) ?>" alt="<?= htmlspecialchars($post['title']) ?>">
                         <?php else: ?>
                             <div
                                 style="height:160px;background:linear-gradient(135deg,#ebf8ff,#bee3f8);display:flex;align-items:center;justify-content:center;font-size:2rem">

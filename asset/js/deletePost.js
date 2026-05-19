@@ -7,7 +7,7 @@ function deleteRequest(id) {
     btn.innerHTML = '<span class="spinner"></span>';
 
     let xhttp = new XMLHttpRequest();
-    xhttp.open('POST', '../../api/delete_request.php', true);
+    xhttp.open('POST', '../../controller/scout/delete_request.php', true);
     xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
     xhttp.send('id=' + id + '&csrf_token=' + csrfToken);
 

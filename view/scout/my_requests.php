@@ -7,6 +7,9 @@ require_once __DIR__ . '/../../model/postRequestModel.php';
 
 $requests = getRequestsByScout($_SESSION['user_id']);
 $activePage = 'my-requests';
+if (empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
