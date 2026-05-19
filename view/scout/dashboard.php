@@ -1,5 +1,6 @@
 <?php
 session_start();
+//require_once('/../../config/auth.php');
 require_once __DIR__ . '/../../config/auth/auth.php';
 requireRole('scout');
 
