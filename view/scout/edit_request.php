@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once __DIR__ . '/../../config/auth.php';
+require_once __DIR__ . '/../../config/auth/auth.php';
 requireVerified();
 require_once __DIR__ . '/../../model/postRequestModel.php';
 
@@ -69,9 +69,9 @@ $activePage = 'my-requests';
 
                 <div class="form-group">
                     <label>Cost Level *</label>
-                    <div class="d-flex gap-2 mt-1">
+                    <div class=cost-level>
                         <?php foreach (['low', 'medium', 'high'] as $c): ?>
-                            <label style="font-weight:400;cursor:pointer">
+                            <label style="font-weight:400;cursor:pointer;display:flex;align-items:center;gap:6px;">
                                 <input type="radio" name="cost_level" value="<?= $c ?>"
                                     <?= ($postData['cost_level'] ?? '') === $c ? 'checked' : '' ?>>
                                 <?= ucfirst($c) ?>
@@ -219,3 +219,5 @@ $activePage = 'my-requests';
 </body>
 
 </html>
+
+<?php include '../../view/layout/footer.php'; ?>

@@ -98,3 +98,4 @@ $activePage = 'dashboard';
 </body>
 
 </html>
+<?php include '../../view/layout/footer.php'; ?>

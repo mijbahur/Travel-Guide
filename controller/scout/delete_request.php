@@ -4,7 +4,7 @@ header('Content-Type: application/json');
 
 if (
     !isset($_SESSION['user_id']) ||
-    $_SESSION['role']        !== 'scout' ||
+    $_SESSION['role'] !== 'scout' ||
     $_SESSION['is_verified'] != 1
 ) {
     echo json_encode(['success' => false, 'message' => 'Unauthorized.']);
@@ -17,7 +17,7 @@ if (($_POST['csrf_token'] ?? '') !== ($_SESSION['csrf_token'] ?? 'x')) {
     exit;
 }
 
-$id = (int)($_POST['id'] ?? 0);
+$id = (int) ($_POST['id'] ?? 0);
 if ($id <= 0) {
     echo json_encode(['success' => false, 'message' => 'Invalid request ID.']);
     exit;
