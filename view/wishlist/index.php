@@ -1,5 +1,6 @@
 <?php
-if (session_status() === PHP_SESSION_NONE) session_start();
+if (session_status() === PHP_SESSION_NONE)
+    session_start();
 
 if (!isset($_SESSION['user_id'])) {
     header('location: ../../view/auth/login.php');
@@ -14,7 +15,7 @@ if ($_SESSION['role'] !== 'user' || !$_SESSION['is_verified']) {
 require_once '../../model/wishlist/WishlistModel.php';
 
 $pageTitle = 'My Wishlist — Travel Guide';
-$baseUrl   = '../../';
+$baseUrl = '../../';
 include '../../view/layout/header.php';
 
 $items = getWishlistByUser($_SESSION['user_id']);
@@ -43,12 +44,11 @@ $items = getWishlistByUser($_SESSION['user_id']);
                             <span>
                                 📍 <?= htmlspecialchars($item['country']) ?> &nbsp;|&nbsp;
                                 🏷️ <?= htmlspecialchars($item['genre']) ?> &nbsp;|&nbsp;
-                                💰 <span class="badge badge-<?= $item['cost_level'] ?>"><?= ucfirst($item['cost_level']) ?></span>
+                                💰 <span
+                                    class="badge badge-<?= $item['cost_level'] ?>"><?= ucfirst($item['cost_level']) ?></span>
                             </span>
                         </div>
-                        <button
-                            class="btn btn-danger btn-sm"
-                            onclick="removeWishlist(<?= $item['post_id'] ?>, this)">
+                        <button class="btn btn-danger btn-sm" onclick="removeWishlist(<?= $item['post_id'] ?>)">
                             Remove
                         </button>
                     </div>
@@ -58,41 +58,35 @@ $items = getWishlistByUser($_SESSION['user_id']);
     </div>
 </div>
 
-<div id="toast" style="display:none;position:fixed;bottom:24px;right:24px;background:#333;color:#fff;padding:12px 20px;border-radius:6px;font-size:14px;z-index:999;"></div>
+<div id="toast"
+    style="display:none;position:fixed;bottom:24px;right:24px;background:#333;color:#fff;padding:12px 20px;border-radius:6px;font-size:14px;z-index:999;">
+</div>
 
 <script>
-function showToast(msg, isError = false) {
-    const t = document.getElementById('toast');
-    t.textContent = msg;
-    t.style.background = isError ? '#e05c3a' : '#28a745';
-    t.style.display = 'block';
-    setTimeout(() => t.style.display = 'none', 2500);
-}
+    function showToast(msg, isError = false) {
+        const t = document.getElementById('toast');
+        t.textContent = msg;
+        t.style.background = isError ? '#e05c3a' : '#28a745';
+        t.style.display = 'block';
+        setTimeout(() => t.style.display = 'none', 2500);
+    }
 
-function removeWishlist(postId, btn) {
-    if (!confirm('Remove this place from your wishlist?')) return;
+    function removeWishlist(postId) {
+    if (!confirm('Remove this place from wishlist?')) return;
 
-    fetch('../../controller/wishlist/WishlistController.php?action=remove', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ post_id: postId })
-    })
-    .then(r => r.json())
-    .then(data => {
-        if (data.success) {
-            const row = document.getElementById('wish-' + postId);
-            if (row) row.remove();
-            showToast('Removed from wishlist.');
+    var xhttp = new XMLHttpRequest();
+    xhttp.open('post', '../../controller/wishlist/WishlistController.php?action=remove', true);
+    xhttp.setRequestHeader("Content-type", "application/json");
+    xhttp.send(JSON.stringify({ post_id: postId }));
 
-            const container = document.getElementById('wishlist-container');
-            if (container && container.children.length === 0) {
-                container.innerHTML = '<div class="alert alert-info" style="margin-top:10px;">Your wishlist is empty.</div>';
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            var data = JSON.parse(this.responseText);
+            if (data.success) {
+                document.getElementById('wish-' + postId).remove();
             }
-        } else {
-            showToast(data.message || 'Error removing.', true);
         }
-    })
-    .catch(() => showToast('Network error.', true));
+    }
 }
 </script>
 

@@ -1,18 +1,19 @@
 <?php
-if (session_status() === PHP_SESSION_NONE) session_start();
+if (session_status() === PHP_SESSION_NONE)
+    session_start();
 
 $pageTitle = 'Home Travel Guide';
-$baseUrl   = './';
+$baseUrl = './';
 include './view/layout/header.php';
 
 $loggedIn = isset($_SESSION['user_id']);
 $verified = $_SESSION['is_verified'] ?? 0;
-$role     = $_SESSION['role'] ?? '';
+$role = $_SESSION['role'] ?? '';
 
 if ($loggedIn && $verified) {
     require_once './model/user/UserModel.php';
-    $posts        = getLatestApprovedPosts(6);
-    $wishlistIds  = [];
+    $posts = getLatestApprovedPosts(6);
+    $wishlistIds = [];
     if ($role === 'user') {
         require_once './model/wishlist/WishlistModel.php';
         $wishlistItems = getWishlistByUser($_SESSION['user_id']);
@@ -78,9 +79,7 @@ if ($loggedIn && $verified) {
                         </p>
 
                         <?php if ($role === 'user'): ?>
-                            <button
-                                class="wishlist-btn <?= $isAdded ? 'added' : '' ?>"
-                                id="wb-<?= $post['id'] ?>"
+                            <button class="wishlist-btn <?= $isAdded ? 'added' : '' ?>" id="wb-<?= $post['id'] ?>"
                                 onclick="toggleWishlist(<?= $post['id'] ?>, this)">
                                 <?= $isAdded ? '♥ Saved!' : '♡ Save to Wishlist' ?>
                             </button>
@@ -93,46 +92,45 @@ if ($loggedIn && $verified) {
 
 </div>
 
-<div id="toast" style="display:none;position:fixed;bottom:24px;right:24px;background:#333;color:#fff;padding:12px 20px;border-radius:6px;font-size:14px;z-index:999;"></div>
+<div id="toast"
+    style="display:none;position:fixed;bottom:24px;right:24px;background:#333;color:#fff;padding:12px 20px;border-radius:6px;font-size:14px;z-index:999;">
+</div>
 
 <?php if ($loggedIn && $verified && $role === 'user'): ?>
-<script>
-function showToast(msg, isError = false) {
-    const t = document.getElementById('toast');
-    t.textContent = msg;
-    t.style.background = isError ? '#e05c3a' : '#28a745';
-    t.style.display = 'block';
-    setTimeout(() => t.style.display = 'none', 2500);
-}
-
-function toggleWishlist(postId, btn) {
-    const isAdded = btn.classList.contains('added');
-    const action  = isAdded ? 'remove' : 'add';
-
-    fetch('./controller/wishlist/WishlistController.php?action=' + action, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ post_id: postId })
-    })
-    .then(r => r.json())
-    .then(data => {
-        if (data.success) {
-            if (isAdded) {
-                btn.classList.remove('added');
-                btn.textContent = '♡ Save to Wishlist';
-                showToast('Removed from wishlist.');
-            } else {
-                btn.classList.add('added');
-                btn.textContent = '♥ Saved!';
-                showToast('Added to wishlist!');
-            }
-        } else {
-            showToast(data.message || 'Error.', true);
+    <script>
+        function showToast(msg, isError = false) {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.style.background = isError ? '#e05c3a' : '#28a745';
+            t.style.display = 'block';
+            setTimeout(() => t.style.display = 'none', 2500);
         }
-    })
-    .catch(() => showToast('Network error.', true));
-}
-</script>
+
+        function toggleWishlist(postId, btn) {
+            var isAdded = btn.classList.contains('added');
+            var action = isAdded ? 'remove' : 'add';
+
+            var xhttp = new XMLHttpRequest();
+            xhttp.open('post', './controller/wishlist/WishlistController.php?action=' + action, true);
+            xhttp.setRequestHeader("Content-type", "application/json");
+            xhttp.send(JSON.stringify({ post_id: postId }));
+
+            xhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    var data = JSON.parse(this.responseText);
+                    if (data.success) {
+                        if (isAdded) {
+                            btn.classList.remove('added');
+                            btn.textContent = '♡ Save to Wishlist';
+                        } else {
+                            btn.classList.add('added');
+                            btn.textContent = '♥ Saved!';
+                        }
+                    }
+                }
+            }
+        }
+    </script>
 <?php endif; ?>
 
 <?php include './view/layout/footer.php'; ?>
